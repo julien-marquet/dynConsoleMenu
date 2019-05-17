@@ -1,4 +1,5 @@
 package com.menu.action;
+import com.menu.exception.*;
 
 public abstract class Action {
 	protected String name;
@@ -7,4 +8,5 @@ public abstract class Action {
 	public String toString() {
 		return (this.name);
 	}
+	public abstract void execute() throws ActionExecutionException, ActionExitException;
 }

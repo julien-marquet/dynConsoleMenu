@@ -1,12 +1,15 @@
 import com.menu.*;
+import com.menu.action.Action;
+import com.menu.exception.*;
+
 import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] argv) {
-		Menu menu = new Menu();
-		Scanner in = new Scanner(System.in);
-		System.out.print(menu.toString());
-		menu.selectAction(in);
+		Menu menu = new OneTimeMenu();
+        Scanner in = new Scanner(System.in);
+        menu.interract(in);
+        in.close();
 	}
 }
 
