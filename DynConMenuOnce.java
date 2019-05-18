@@ -1,12 +1,12 @@
-package com.menu;
+package com.dynconmenu;
 
-import  com.menu.option.*;
-import  com.menu.exception.*;
+import  com.dynconmenu.option.*;
+import  com.dynconmenu.exception.*;
 
 import  java.util.Scanner;
 
-public class OneShotMenu extends Menu{
-    public OneShotMenu() {
+public class DynConMenuOnce extends DynConMenu{
+    public DynConMenuOnce() {
         super();
     }
 

@@ -1,7 +1,7 @@
-package	com.menu.option;
+package	com.dynconmenu.option;
 
-import	com.menu.option.optionparams.*;
-import	com.menu.exception.OptionExitException;
+import	com.dynconmenu.option.optionparams.*;
+import	com.dynconmenu.exception.OptionExitException;
 
 public class Exit extends Option {
 	public Exit(ExitOptionParams optionParam) {

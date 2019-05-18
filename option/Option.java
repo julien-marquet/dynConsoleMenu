@@ -1,7 +1,7 @@
-package	com.menu.option;
+package	com.dynconmenu.option;
 
-import	com.menu.option.optionparams.OptionParams;
-import	com.menu.exception.*;
+import	com.dynconmenu.option.optionparams.OptionParams;
+import	com.dynconmenu.exception.*;
 
 public abstract class Option {
 	protected OptionParams optionParam;

@@ -1,8 +1,8 @@
-package	com.menu;
+package	com.dynconmenu;
 
-import	com.menu.option.*;
-import	com.menu.option.optionparams.*;
-import	com.menu.exception.*;
+import	com.dynconmenu.option.*;
+import	com.dynconmenu.option.optionparams.*;
+import	com.dynconmenu.exception.*;
 
 import	java.io.StringWriter;
 import	java.util.Enumeration;
@@ -12,7 +12,7 @@ import	java.util.InputMismatchException;
 import	java.util.NoSuchElementException;
 import	java.util.Scanner;
 
-public class Menu {
+public class DynConMenu {
 	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%s\nVotre choix = ";
 	public static final String DEFAULT_OPTION_LAYOUT = "\t%d : %s\n";
 	public static final Hashtable<String, Option> DEFAULT_OPTIONS = getDefaultOptions();
@@ -26,35 +26,34 @@ public class Menu {
 	private static Hashtable<String, Option> getDefaultOptions() {
 		Hashtable<String, Option> options = new Hashtable<String, Option>();
 		options.put("exit" , new Exit(new ExitOptionParams("exit")));
-		options.put("repeat", new Repeat(new RepeatOptionParams("repeat")));
 		return (options);
 	}
 
-	public Menu() {
+	public DynConMenu() {
 		this.options = DEFAULT_OPTIONS;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
 		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Option> options) {
+	public DynConMenu(Hashtable<String, Option> options) {
 		this.options = options;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
 		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Option> options, String menuLayout) {
+	public DynConMenu(Hashtable<String, Option> options, String menuLayout) {
 		this.options = options;
 		this.menuLayout = menuLayout;
 		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Option> options, String menuLayout, String optionLayout) {
+	public DynConMenu(Hashtable<String, Option> options, String menuLayout, String optionLayout) {
 		this.options = options;
 		this.menuLayout = menuLayout;
 		this.optionLayout = optionLayout;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Option> options, String menuLayout, String optionLayout, String optionSeparator) {
+	public DynConMenu(Hashtable<String, Option> options, String menuLayout, String optionLayout, String optionSeparator) {
 		this.options = options;
 		this.menuLayout = menuLayout;
 		this.optionLayout = optionLayout;
