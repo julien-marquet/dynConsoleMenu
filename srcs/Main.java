@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] argv) {
-		Menu menu = new OneTimeMenu();
+		Menu menu = new Menu();
         Scanner in = new Scanner(System.in);
         menu.interract(in);
         in.close();
