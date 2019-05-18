@@ -8,6 +8,7 @@ import	java.io.StringReader;
 import	java.io.StringWriter;
 import	java.util.Enumeration;
 import	java.util.Hashtable;
+import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -30,7 +31,7 @@ public class Menu {
 	}
 
 	private Action getActionByIndex(int userIndex, Scanner in)
-	throws NoSuchElementException, IllegalStateException, NullPointerException {
+	throws NoSuchElementException, InputMismatchException {
 		int		i;
 		Action	action;
 	
@@ -53,7 +54,7 @@ public class Menu {
 
 		try {
 			return (getActionByIndex(userIndex, in));
-		} catch (NoSuchElementException notAnInt) {
+		} catch (NoSuchElementException | InputMismatchException notAnInt) {
 			try {
 				userKey = in.nextLine();
 			} catch (NoSuchElementException notAString) {
