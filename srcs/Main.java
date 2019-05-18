@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] argv) {
-		Menu menu = new Menu();
+		Menu menu = new Menu(Menu.DEFAULT_ACTIONS, "Menu = \n%s\nChoix ? ", " %d: %s", "\n");
         Scanner in = new Scanner(System.in);
         menu.interract(in);
         in.close();

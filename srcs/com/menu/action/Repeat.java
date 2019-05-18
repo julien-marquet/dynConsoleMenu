@@ -1,11 +1,9 @@
 package	com.menu.action;
+import com.menu.action.actionparam.*;
 
 public class Repeat extends Action {
-	public Repeat() {
-		this.name = "repeat";
-	}
-	public Repeat(String name) {
-		this.name = name;
+	public Repeat(RepeatActionParam actionParam) {
+		super(actionParam);
 	}
 	public void execute() {
 		System.out.println("Repeat");

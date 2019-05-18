@@ -1,37 +1,68 @@
 package	com.menu;
-import	com.menu.action.*;
-import com.menu.exception.*;
 
-import	java.io.CharArrayReader;
-import	java.io.CharArrayWriter;
-import	java.io.StringReader;
+import	com.menu.action.*;
+import com.menu.action.actionparam.*;
+import	com.menu.exception.*;
+
 import	java.io.StringWriter;
 import	java.util.Enumeration;
 import	java.util.Hashtable;
-import java.util.InputMismatchException;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import	java.util.IllegalFormatException;
+import	java.util.InputMismatchException;
+import	java.util.NoSuchElementException;
+import	java.util.Scanner;
 
 public class Menu {
-	private Hashtable<String, Action> actions;
+	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%s\nVotre choix = ";
+	public static final String DEFAULT_ACTION_LAYOUT = "\t%d : %s\n";
+	public static final Hashtable<String, Action> DEFAULT_ACTIONS = getDefaultActions();
+	public static final String DEFAULT_ACTIONS_SEPARATOR = "\n";
 
-	private	Hashtable<String, Action> getDefaultActions() {
+	private Hashtable<String, Action> actions;
+	private String menuLayout;
+	private String actionLayout;
+	private String actionSeparator;
+
+	private static Hashtable<String, Action> getDefaultActions() {
 		Hashtable<String, Action> actions = new Hashtable<String, Action>();
-		actions.put("exit", new Exit());
-		actions.put("repeat", new Repeat());
+		actions.put("exit" , new Exit(new ExitActionParam("exit")));
+		actions.put("repeat", new Repeat(new RepeatActionParam("repeat")));
 		return (actions);
 	}
 
 	public Menu() {
-		this.actions = getDefaultActions();
+		this.actions = DEFAULT_ACTIONS;
+		this.menuLayout = DEFAULT_MENU_LAYOUT;
+		this.actionLayout = DEFAULT_ACTION_LAYOUT;
+		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
 	}
-
 	public Menu(Hashtable<String, Action> actions) {
 		this.actions = actions;
+		this.menuLayout = DEFAULT_MENU_LAYOUT;
+		this.actionLayout = DEFAULT_ACTION_LAYOUT;
+		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+	}
+	public Menu(Hashtable<String, Action> actions, String menuLayout) {
+		this.actions = actions;
+		this.menuLayout = menuLayout;
+		this.actionLayout = DEFAULT_ACTION_LAYOUT;
+		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+	}
+	public Menu(Hashtable<String, Action> actions, String menuLayout, String actionLayout) {
+		this.actions = actions;
+		this.menuLayout = menuLayout;
+		this.actionLayout = actionLayout;
+		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+	}
+	public Menu(Hashtable<String, Action> actions, String menuLayout, String actionLayout, String actionSeparator) {
+		this.actions = actions;
+		this.menuLayout = menuLayout;
+		this.actionLayout = actionLayout;
+		this.actionSeparator = actionSeparator;
 	}
 
 	private Action getActionByIndex(int userIndex, Scanner in)
-	throws NoSuchElementException, InputMismatchException {
+	throws NoSuchElementException {
 		int		i;
 		Action	action;
 	
@@ -47,14 +78,14 @@ public class Menu {
 		}
 		throw new NoSuchElementException();
 	}
-	public Action selectAction(Scanner in)
-	throws ActionInputException {
+	
+	public Action selectAction(Scanner in) throws ActionInputException {
 		String	userKey = null;
 		int		userIndex = -1;
 
 		try {
 			return (getActionByIndex(userIndex, in));
-		} catch (NoSuchElementException | InputMismatchException notAnInt) {
+		} catch (NoSuchElementException notAnInt) {
 			try {
 				userKey = in.nextLine();
 			} catch (NoSuchElementException notAString) {
@@ -83,7 +114,6 @@ public class Menu {
                 }
             }
             try {
-				System.out.println("Executing " + action);
                 action.execute();
             } catch (ActionExecutionException e) {
                 System.err.println(e.getMessage());
@@ -98,11 +128,21 @@ public class Menu {
 		Enumeration<Action>	e = actions.elements();
 		StringWriter writer = new StringWriter();
 		int i = 1;
-		writer.append("MENU\n");
-		while (e.hasMoreElements()) {
-			writer.append("  " + i + " : " + e.nextElement().toString() + "\n");
-			i++;
+
+		try {
+			while (e.hasMoreElements()) {
+				if (i != 1)
+					writer.append(this.actionSeparator);
+				writer.append(String.format(this.actionLayout, i, e.nextElement().toString()));
+				i++;
+			}
+		} catch (IllegalFormatException eActionLayout) {
+			return ("actionLayout not properly formatted\n");
 		}
-		return (writer.toString());
+		try {
+			return (String.format(this.menuLayout, writer.toString()));
+		} catch (IllegalFormatException eMenuLayout) {
+			return ("menuLayout not properly formatted\n");
+		}
 	}
 }
