@@ -1,4 +1,4 @@
-package com.dynconmenu.exception;
+package dynconmenu.exception;
 
 public class OptionExitException extends Exception {
     public OptionExitException() {

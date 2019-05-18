@@ -1,6 +1,6 @@
-package com.dynconmenu.option.optionparams;
+package dynconmenu.option.optionparams;
 
-import  com.dynconmenu.option.optionparams.OptionParams;
+import  dynconmenu.option.optionparams.OptionParams;
 
 public class ExitOptionParams extends OptionParams {
     public String optionName;

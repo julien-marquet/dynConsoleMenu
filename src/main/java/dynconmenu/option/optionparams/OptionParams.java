@@ -1,4 +1,4 @@
-package com.dynconmenu.option.optionparams;
+package dynconmenu.option.optionparams;
 
 public class OptionParams {
     public String optionName;

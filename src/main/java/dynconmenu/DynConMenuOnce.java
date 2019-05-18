@@ -1,7 +1,7 @@
-package com.dynconmenu;
+package dynconmenu;
 
-import  com.dynconmenu.option.*;
-import  com.dynconmenu.exception.*;
+import  dynconmenu.option.*;
+import  dynconmenu.exception.*;
 
 import  java.util.Scanner;
 

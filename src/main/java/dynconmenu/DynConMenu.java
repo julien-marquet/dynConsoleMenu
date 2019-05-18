@@ -1,8 +1,8 @@
-package	com.dynconmenu;
+package	dynconmenu;
 
-import	com.dynconmenu.option.*;
-import	com.dynconmenu.option.optionparams.*;
-import	com.dynconmenu.exception.*;
+import	dynconmenu.option.*;
+import	dynconmenu.option.optionparams.*;
+import	dynconmenu.exception.*;
 
 import	java.io.StringWriter;
 import	java.util.Enumeration;

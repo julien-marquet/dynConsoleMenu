@@ -1,4 +1,4 @@
-package com.dynconmenu.exception;
+package dynconmenu.exception;
 
 public class OptionInputException extends Exception {
     private static final long serialVersionUID = 123L;
