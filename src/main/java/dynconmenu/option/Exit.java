@@ -4,8 +4,8 @@ import	dynconmenu.option.optionparams.*;
 import	dynconmenu.exception.OptionExitException;
 
 public class Exit extends Option {
-	public Exit(ExitOptionParams optionParams, String optionLayout) {
-		super(optionParams, optionLayout);
+	public Exit(ExitOptionParams params, String layout) {
+		super(params, layout);
 
 	}
 	public void execute()

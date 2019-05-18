@@ -15,7 +15,7 @@ public class DynConMenuOnce extends DynConMenu{
 
         System.out.print(this.toString());
         try {
-            option = this.selectOption(in);
+            option = this.userGetOption(in);
             try {
                 option.execute();
             } catch (OptionExecutionException eExec) {

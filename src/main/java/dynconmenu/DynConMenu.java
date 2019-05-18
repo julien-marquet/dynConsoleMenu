@@ -20,7 +20,6 @@ public class DynConMenu {
 
 	private Hashtable<String, Option> options;
 	private String menuLayout;
-	private String optionLayout;
 	private String optionSeparator;
 
 	private static Hashtable<String, Option> getDefaultOptions() {
@@ -32,31 +31,21 @@ public class DynConMenu {
 	public DynConMenu() {
 		this.options = DEFAULT_OPTIONS;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
-		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
 	public DynConMenu(Hashtable<String, Option> options) {
 		this.options = options;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
-		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
 	public DynConMenu(Hashtable<String, Option> options, String menuLayout) {
 		this.options = options;
 		this.menuLayout = menuLayout;
-		this.optionLayout = DEFAULT_OPTION_LAYOUT;
 		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public DynConMenu(Hashtable<String, Option> options, String menuLayout, String optionLayout) {
+	public DynConMenu(Hashtable<String, Option> options, String menuLayout, String optionSeparator) {
 		this.options = options;
 		this.menuLayout = menuLayout;
-		this.optionLayout = optionLayout;
-		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
-	}
-	public DynConMenu(Hashtable<String, Option> options, String menuLayout, String optionLayout, String optionSeparator) {
-		this.options = options;
-		this.menuLayout = menuLayout;
-		this.optionLayout = optionLayout;
 		this.optionSeparator = optionSeparator;
 	}
 
@@ -66,10 +55,6 @@ public class DynConMenu {
 
 	public String getMenuLayout() {
 		return (this.menuLayout);
-	}
-
-	public String getOptionLayout() {
-		return (this.optionLayout);
 	}
 
 	public String getOptionSeparator() {
@@ -82,10 +67,6 @@ public class DynConMenu {
 
 	public void setMenuLayout(String menuLayout) {
 		this.menuLayout = menuLayout;
-	}
-
-	public void setOptionLayout(String optionLayout) {
-		this.optionLayout = optionLayout;
 	}
 
 	public void setOptionSeparator(String optionSeparator) {
@@ -110,7 +91,28 @@ public class DynConMenu {
 		throw new NoSuchElementException();
 	}
 	
-	public Option selectOption(Scanner in) throws OptionInputException {
+	public Option getOption(int index) throws NoSuchElementException{
+		Enumeration<Option> eht = options.elements();
+		int i = 1;
+		Option	option;
+
+		while (eht.hasMoreElements()) {
+			option = eht.nextElement();
+			if (i == index) {
+				return (option);
+			}
+			i++;
+		}
+		throw new NoSuchElementException();
+	}
+	public Option getOption(String key) throws NoSuchElementException {
+		if (this.options.containsKey(key)) {
+			return (this.options.get(key));
+		}
+		throw new NoSuchElementException();
+	}
+
+	public Option userGetOption(Scanner in) throws OptionInputException {
 		String	userKey = null;
 		int		userIndex = -1;
 
@@ -139,7 +141,7 @@ public class DynConMenu {
             {
                 System.out.print(this.toString());
                 try {
-                    option = this.selectOption(in);
+                    option = this.userGetOption(in);
                 } catch (OptionInputException e) {
                     System.err.println(e.getMessage());
                 }
