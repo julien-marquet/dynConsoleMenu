@@ -1,7 +1,7 @@
 package	com.menu;
 
-import	com.menu.action.*;
-import com.menu.action.actionparam.*;
+import	com.menu.option.*;
+import	com.menu.option.optionparams.*;
 import	com.menu.exception.*;
 
 import	java.io.StringWriter;
@@ -14,130 +14,130 @@ import	java.util.Scanner;
 
 public class Menu {
 	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%s\nVotre choix = ";
-	public static final String DEFAULT_ACTION_LAYOUT = "\t%d : %s\n";
-	public static final Hashtable<String, Action> DEFAULT_ACTIONS = getDefaultActions();
-	public static final String DEFAULT_ACTIONS_SEPARATOR = "\n";
+	public static final String DEFAULT_OPTION_LAYOUT = "\t%d : %s\n";
+	public static final Hashtable<String, Option> DEFAULT_OPTIONS = getDefaultOptions();
+	public static final String DEFAULT_OPTIONS_SEPARATOR = "\n";
 
-	private Hashtable<String, Action> actions;
+	private Hashtable<String, Option> options;
 	private String menuLayout;
-	private String actionLayout;
-	private String actionSeparator;
+	private String optionLayout;
+	private String optionSeparator;
 
-	private static Hashtable<String, Action> getDefaultActions() {
-		Hashtable<String, Action> actions = new Hashtable<String, Action>();
-		actions.put("exit" , new Exit(new ExitActionParam("exit")));
-		actions.put("repeat", new Repeat(new RepeatActionParam("repeat")));
-		return (actions);
+	private static Hashtable<String, Option> getDefaultOptions() {
+		Hashtable<String, Option> options = new Hashtable<String, Option>();
+		options.put("exit" , new Exit(new ExitOptionParams("exit")));
+		options.put("repeat", new Repeat(new RepeatOptionParams("repeat")));
+		return (options);
 	}
 
 	public Menu() {
-		this.actions = DEFAULT_ACTIONS;
+		this.options = DEFAULT_OPTIONS;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
-		this.actionLayout = DEFAULT_ACTION_LAYOUT;
-		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+		this.optionLayout = DEFAULT_OPTION_LAYOUT;
+		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Action> actions) {
-		this.actions = actions;
+	public Menu(Hashtable<String, Option> options) {
+		this.options = options;
 		this.menuLayout = DEFAULT_MENU_LAYOUT;
-		this.actionLayout = DEFAULT_ACTION_LAYOUT;
-		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+		this.optionLayout = DEFAULT_OPTION_LAYOUT;
+		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Action> actions, String menuLayout) {
-		this.actions = actions;
+	public Menu(Hashtable<String, Option> options, String menuLayout) {
+		this.options = options;
 		this.menuLayout = menuLayout;
-		this.actionLayout = DEFAULT_ACTION_LAYOUT;
-		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+		this.optionLayout = DEFAULT_OPTION_LAYOUT;
+		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Action> actions, String menuLayout, String actionLayout) {
-		this.actions = actions;
+	public Menu(Hashtable<String, Option> options, String menuLayout, String optionLayout) {
+		this.options = options;
 		this.menuLayout = menuLayout;
-		this.actionLayout = actionLayout;
-		this.actionSeparator = DEFAULT_ACTIONS_SEPARATOR;
+		this.optionLayout = optionLayout;
+		this.optionSeparator = DEFAULT_OPTIONS_SEPARATOR;
 	}
-	public Menu(Hashtable<String, Action> actions, String menuLayout, String actionLayout, String actionSeparator) {
-		this.actions = actions;
+	public Menu(Hashtable<String, Option> options, String menuLayout, String optionLayout, String optionSeparator) {
+		this.options = options;
 		this.menuLayout = menuLayout;
-		this.actionLayout = actionLayout;
-		this.actionSeparator = actionSeparator;
+		this.optionLayout = optionLayout;
+		this.optionSeparator = optionSeparator;
 	}
 
-	private Action getActionByIndex(int userIndex, Scanner in)
+	private Option getOptionByIndex(int userIndex, Scanner in)
 	throws NoSuchElementException {
 		int		i;
-		Action	action;
+		Option	option;
 	
 		userIndex = in.nextInt();
-		Enumeration<Action> eht = actions.elements();
+		Enumeration<Option> eht = options.elements();
 		i = 1;
 		while (eht.hasMoreElements()) {
-			action = eht.nextElement();
+			option = eht.nextElement();
 			if (i == userIndex) {
-				return (action);
+				return (option);
 			}
 			i++;
 		}
 		throw new NoSuchElementException();
 	}
 	
-	public Action selectAction(Scanner in) throws ActionInputException {
+	public Option selectOption(Scanner in) throws OptionInputException {
 		String	userKey = null;
 		int		userIndex = -1;
 
 		try {
-			return (getActionByIndex(userIndex, in));
+			return (getOptionByIndex(userIndex, in));
 		} catch (NoSuchElementException notAnInt) {
 			try {
 				userKey = in.nextLine();
 			} catch (NoSuchElementException notAString) {
-				throw new ActionInputException("Empty input");
+				throw new OptionInputException("Empty input");
 			}
-			if (this.actions.containsKey(userKey)) {
-				return (this.actions.get(userKey));
+			if (this.options.containsKey(userKey)) {
+				return (this.options.get(userKey));
 			}
 		} catch (IllegalStateException | NullPointerException inputError) {
-			throw new ActionInputException("Input error");
+			throw new OptionInputException("Input error");
 		}
-		throw new ActionInputException("No actions matched the input");
+		throw new OptionInputException("No options matched the input");
 	}
 
 	public void	interract(Scanner in) {
-		Action action = null;
+		Option option = null;
 
 		while (true) {
-            while (action == null)
+            while (option == null)
             {
                 System.out.print(this.toString());
                 try {
-                    action = this.selectAction(in);
-                } catch (ActionInputException e) {
+                    option = this.selectOption(in);
+                } catch (OptionInputException e) {
                     System.err.println(e.getMessage());
                 }
             }
             try {
-                action.execute();
-            } catch (ActionExecutionException e) {
+                option.execute();
+            } catch (OptionExecutionException e) {
                 System.err.println(e.getMessage());
-            } catch (ActionExitException e) {
+            } catch (OptionExitException e) {
                 break ;
             }
-            action = null;
+            option = null;
         }
 	}
 
 	public String toString() {
-		Enumeration<Action>	e = actions.elements();
+		Enumeration<Option>	e = options.elements();
 		StringWriter writer = new StringWriter();
 		int i = 1;
 
 		try {
 			while (e.hasMoreElements()) {
 				if (i != 1)
-					writer.append(this.actionSeparator);
-				writer.append(String.format(this.actionLayout, i, e.nextElement().toString()));
+					writer.append(this.optionSeparator);
+				writer.append(String.format(this.optionLayout, i, e.nextElement().toString()));
 				i++;
 			}
-		} catch (IllegalFormatException eActionLayout) {
-			return ("actionLayout not properly formatted\n");
+		} catch (IllegalFormatException eOptionLayout) {
+			return ("optionLayout not properly formatted\n");
 		}
 		try {
 			return (String.format(this.menuLayout, writer.toString()));
