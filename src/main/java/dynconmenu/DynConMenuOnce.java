@@ -18,8 +18,10 @@ public class DynConMenuOnce extends DynConMenu{
             option = this.selectOption(in);
             try {
                 option.execute();
-            } catch (OptionExecutionException | OptionExitException e) {
-                System.err.println(e.getMessage());
+            } catch (OptionExecutionException eExec) {
+                System.err.println(eExec.getMessage());
+            } catch (OptionExitException eExit) {
+                return ;
             }
         } catch (OptionInputException e) {
             System.err.println(e.getMessage());

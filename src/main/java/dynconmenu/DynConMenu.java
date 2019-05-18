@@ -13,7 +13,7 @@ import	java.util.NoSuchElementException;
 import	java.util.Scanner;
 
 public class DynConMenu {
-	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%s\nVotre choix = ";
+	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%sVotre choix = ";
 	public static final String DEFAULT_OPTION_LAYOUT = "\t%d : %s\n";
 	public static final Hashtable<String, Option> DEFAULT_OPTIONS = getDefaultOptions();
 	public static final String DEFAULT_OPTIONS_SEPARATOR = "\n";
@@ -25,7 +25,7 @@ public class DynConMenu {
 
 	private static Hashtable<String, Option> getDefaultOptions() {
 		Hashtable<String, Option> options = new Hashtable<String, Option>();
-		options.put("exit" , new Exit(new ExitOptionParams("exit")));
+		options.put("exit" , new Exit(new ExitOptionParams("exit"), DEFAULT_OPTION_LAYOUT));
 		return (options);
 	}
 
@@ -57,6 +57,38 @@ public class DynConMenu {
 		this.options = options;
 		this.menuLayout = menuLayout;
 		this.optionLayout = optionLayout;
+		this.optionSeparator = optionSeparator;
+	}
+
+	public Hashtable<String, Option> getOptions() {
+		return (this.options);
+	}
+
+	public String getMenuLayout() {
+		return (this.menuLayout);
+	}
+
+	public String getOptionLayout() {
+		return (this.optionLayout);
+	}
+
+	public String getOptionSeparator() {
+		return (this.optionSeparator);
+	}
+
+	public void setOptions(Hashtable<String, Option> options) {
+		this.options = options;
+	}
+
+	public void setMenuLayout(String menuLayout) {
+		this.menuLayout = menuLayout;
+	}
+
+	public void setOptionLayout(String optionLayout) {
+		this.optionLayout = optionLayout;
+	}
+
+	public void setOptionSeparator(String optionSeparator) {
 		this.optionSeparator = optionSeparator;
 	}
 
@@ -132,7 +164,7 @@ public class DynConMenu {
 			while (e.hasMoreElements()) {
 				if (i != 1)
 					writer.append(this.optionSeparator);
-				writer.append(String.format(this.optionLayout, i, e.nextElement().toString()));
+				writer.append(e.nextElement().getOptionString(i));
 				i++;
 			}
 		} catch (IllegalFormatException eOptionLayout) {
