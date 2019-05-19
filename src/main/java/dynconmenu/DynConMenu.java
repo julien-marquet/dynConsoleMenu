@@ -123,6 +123,14 @@ public class DynConMenu {
 		throw new NoSuchElementException();
 	}
 
+	public void addOption(Option option) {
+		options.put(option.getName(), option);
+	}
+
+	public void removeOption(String key) {
+		options.remove(key);
+	}
+
 	public Option userGetOption(Scanner in) throws MenuInputException {
 		String	userKey = null;
 		int		userIndex = -1;
@@ -178,7 +186,7 @@ public class DynConMenu {
 			if (option.isHidden() == false) {
 				if (i != 1)
 					writer.append(this.optionSeparator);
-				writer.append(option.getOptionString(i));
+				writer.append(option.getString(i));
 				i++;
 			}
 		}
@@ -187,7 +195,7 @@ public class DynConMenu {
 		try {
 			return (String.format(this.menuLayout, writer.toString()));
 		} catch (IllegalFormatException eMenuLayout) {
-			return ("menuLayout not properly formatted\n");
+			throw new MenuDisplayException("menuLayout not properly formatted");
 		}
 	}
 }

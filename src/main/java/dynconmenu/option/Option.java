@@ -9,17 +9,20 @@ public abstract class Option {
 	protected OptionParams params;
 	protected String layout;
 	protected boolean hidden;
+	protected String name;
 
 	public Option(OptionParams params, String layout) {
 		this.params = params;
 		this.layout = layout;
 		this.hidden = false;
+		this.name = params.optionName;
 	}
 
 	public Option(OptionParams params, String layout, boolean hidden) {
 		this.params = params;
 		this.layout = layout;
 		this.hidden = hidden;
+		this.name = params.optionName;
 	}
 
 	public void setLayout(String layout) {
@@ -42,19 +45,23 @@ public abstract class Option {
 		return (this.hidden);
 	}
 
-	public OptionParams getOptionParams() {
+	public String getName() {
+		return (this.name);
+	}
+
+	public OptionParams getParams() {
 		return (this.params);
 	}
 
-	public String getOptionLayout() {
+	public String getLayout() {
 		return (this.layout);
 	}
 
-	public String getOptionString(int index) {
+	public String getString(int index) {
 		try {
-			return (String.format(this.layout, index, this.params.optionName));
+			return (String.format(this.layout, index, this.name));
 		} catch(IllegalFormatException e) {
-			return ("OptionLayout of " + this.params.optionName + " not properly formatted");
+			return ("OptionLayout of " + this.name + " not properly formatted");
 		}
 	}
 

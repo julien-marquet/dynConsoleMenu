@@ -15,9 +15,14 @@ public class Test {
             System.out.println("no elem");
             return ;
         }
-        option.setLayout("%d%d -> %s\n");
+        option.setLayout("%d%d -> %s");
         menu.interract(in);
+        option.setLayout("%d -> %s");
         option.hide();
+        menu.interract(in);
+        option.show();
+        menu.interract(in);
+        menu.removeOption(option.getName());
         menu.interract(in);
         in.close();
     }
