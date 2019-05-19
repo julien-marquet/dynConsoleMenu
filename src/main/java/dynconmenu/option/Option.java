@@ -1,17 +1,25 @@
 package	dynconmenu.option;
 
 import	dynconmenu.option.optionparams.OptionParams;
-import	dynconmenu.exception.*;
+import	dynconmenu.exception.option.*;
 
 import	java.util.IllegalFormatException;
 
 public abstract class Option {
 	protected OptionParams params;
 	protected String layout;
+	protected boolean hidden;
 
 	public Option(OptionParams params, String layout) {
 		this.params = params;
 		this.layout = layout;
+		this.hidden = false;
+	}
+
+	public Option(OptionParams params, String layout, boolean hidden) {
+		this.params = params;
+		this.layout = layout;
+		this.hidden = hidden;
 	}
 
 	public void setLayout(String layout) {
@@ -20,6 +28,18 @@ public abstract class Option {
 
 	public void setParams(OptionParams params) {
 		this.params = params;
+	}
+
+	public void hide() {
+		this.hidden = true;
+	}
+
+	public void show() {
+		this.hidden = false;
+	}
+
+	public boolean isHidden() {
+		return (this.hidden);
 	}
 
 	public OptionParams getOptionParams() {

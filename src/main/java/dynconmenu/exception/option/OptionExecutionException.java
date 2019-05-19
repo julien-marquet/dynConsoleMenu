@@ -1,6 +1,6 @@
-package dynconmenu.exception;
+package dynconmenu.exception.option;
 
-public class OptionExecutionException extends Exception {
+public class OptionExecutionException extends OptionException {
     private static final long serialVersionUID = 123L;
     
     public OptionExecutionException() {

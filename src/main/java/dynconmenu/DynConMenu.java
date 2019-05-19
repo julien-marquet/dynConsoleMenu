@@ -2,7 +2,8 @@ package	dynconmenu;
 
 import	dynconmenu.option.*;
 import	dynconmenu.option.optionparams.*;
-import	dynconmenu.exception.*;
+import	dynconmenu.exception.menu.*;
+import	dynconmenu.exception.option.*;
 
 import	java.io.StringWriter;
 import	java.util.Enumeration;
@@ -13,8 +14,8 @@ import	java.util.NoSuchElementException;
 import	java.util.Scanner;
 
 public class DynConMenu {
-	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%sVotre choix = ";
-	public static final String DEFAULT_OPTION_LAYOUT = "\t%d : %s\n";
+	public static final String DEFAULT_MENU_LAYOUT = "Menu :\n%s\nVotre choix = ";
+	public static final String DEFAULT_OPTION_LAYOUT = "\t%d : %s";
 	public static final Hashtable<String, Option> DEFAULT_OPTIONS = getDefaultOptions();
 	public static final String DEFAULT_OPTIONS_SEPARATOR = "\n";
 
@@ -72,26 +73,36 @@ public class DynConMenu {
 	public void setOptionSeparator(String optionSeparator) {
 		this.optionSeparator = optionSeparator;
 	}
-
-	private Option getOptionByIndex(int userIndex, Scanner in)
-	throws NoSuchElementException {
-		int		i;
-		Option	option;
 	
-		userIndex = in.nextInt();
+	public Option getDisplayableOption(int index) throws NoSuchElementException {
 		Enumeration<Option> eht = options.elements();
-		i = 1;
+		int i = 1;
+		Option	option;
+
 		while (eht.hasMoreElements()) {
 			option = eht.nextElement();
-			if (i == userIndex) {
-				return (option);
+			if (option.isHidden() == false)
+			{
+				if (i == index) {
+					return (option);
+				}
+				i++;
 			}
-			i++;
 		}
 		throw new NoSuchElementException();
 	}
-	
-	public Option getOption(int index) throws NoSuchElementException{
+	public Option getDisplayableOption(String key) throws NoSuchElementException {
+		Option option;
+		
+		if (this.options.containsKey(key)) {
+			option = this.options.get(key);
+			if (option.isHidden() == false)
+				return (option);
+		}
+		throw new NoSuchElementException();
+	}
+
+	public Option getOption(int index) throws NoSuchElementException {
 		Enumeration<Option> eht = options.elements();
 		int i = 1;
 		Option	option;
@@ -112,25 +123,21 @@ public class DynConMenu {
 		throw new NoSuchElementException();
 	}
 
-	public Option userGetOption(Scanner in) throws OptionInputException {
+	public Option userGetOption(Scanner in) throws MenuInputException {
 		String	userKey = null;
 		int		userIndex = -1;
 
 		try {
-			return (getOptionByIndex(userIndex, in));
+			return (getDisplayableOption(in.nextInt()));
 		} catch (NoSuchElementException notAnInt) {
 			try {
-				userKey = in.nextLine();
+				return (getDisplayableOption(in.nextLine()));
 			} catch (NoSuchElementException notAString) {
-				throw new OptionInputException("Empty input");
-			}
-			if (this.options.containsKey(userKey)) {
-				return (this.options.get(userKey));
+				throw new MenuInputException("No options matched the input");
 			}
 		} catch (IllegalStateException | NullPointerException inputError) {
-			throw new OptionInputException("Input error");
+			throw new MenuInputException("Input error");
 		}
-		throw new OptionInputException("No options matched the input");
 	}
 
 	public void	interract(Scanner in) {
@@ -139,11 +146,14 @@ public class DynConMenu {
 		while (true) {
             while (option == null)
             {
-                System.out.print(this.toString());
                 try {
+					System.out.print(this.getMenu());
                     option = this.userGetOption(in);
-                } catch (OptionInputException e) {
-                    System.err.println(e.getMessage());
+				} catch (MenuInputException e) {
+					System.err.println(e.getMessage());
+				} catch (MenuDisplayException e) {
+					System.err.println(e.getMessage());
+					return ;
                 }
             }
             try {
@@ -157,21 +167,23 @@ public class DynConMenu {
         }
 	}
 
-	public String toString() {
+	public String getMenu() throws MenuDisplayException {
 		Enumeration<Option>	e = options.elements();
 		StringWriter writer = new StringWriter();
 		int i = 1;
+		Option option;
 
-		try {
-			while (e.hasMoreElements()) {
+		while (e.hasMoreElements()) {
+			option = e.nextElement();
+			if (option.isHidden() == false) {
 				if (i != 1)
 					writer.append(this.optionSeparator);
-				writer.append(e.nextElement().getOptionString(i));
+				writer.append(option.getOptionString(i));
 				i++;
 			}
-		} catch (IllegalFormatException eOptionLayout) {
-			return ("optionLayout not properly formatted\n");
 		}
+		if (i == 1)
+			throw new MenuDisplayException("No option to display");
 		try {
 			return (String.format(this.menuLayout, writer.toString()));
 		} catch (IllegalFormatException eMenuLayout) {

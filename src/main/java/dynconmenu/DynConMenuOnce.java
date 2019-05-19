@@ -1,7 +1,9 @@
 package dynconmenu;
 
 import  dynconmenu.option.*;
-import  dynconmenu.exception.*;
+import  dynconmenu.exception.menu.*;
+import  dynconmenu.exception.option.*;
+
 
 import  java.util.Scanner;
 
@@ -13,8 +15,9 @@ public class DynConMenuOnce extends DynConMenu{
     public void	interract(Scanner in) {
 		Option option = null;
 
-        System.out.print(this.toString());
+        
         try {
+            System.out.print(this.getMenu());
             option = this.userGetOption(in);
             try {
                 option.execute();
@@ -23,7 +26,7 @@ public class DynConMenuOnce extends DynConMenu{
             } catch (OptionExitException eExit) {
                 return ;
             }
-        } catch (OptionInputException e) {
+        } catch (MenuInputException | MenuDisplayException e) {
             System.err.println(e.getMessage());
         }
     }
