@@ -62,6 +62,26 @@ public class DynConMenu {
 		return (this.optionSeparator);
 	}
 
+	public int countOptions() {
+		Enumeration<String> e = options.keys();
+		int	cpt = 0;
+		while (e.hasMoreElements()) {
+			cpt++;
+			e.nextElement();
+		}
+		return (cpt);
+	}
+
+	public int countDisplayableOptions() {
+		Enumeration<Option> e = options.elements();
+		int	cpt = 0;
+		while (e.hasMoreElements()) {
+			if (e.nextElement().isHidden() == false)
+				cpt++;
+		}
+		return (cpt);
+	}
+
 	public void setOptions(Hashtable<String, Option> options) {
 		this.options = options;
 	}
